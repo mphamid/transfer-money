@@ -12,8 +12,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('transfers', function (Blueprint $table) {
-            $table->ulid();
-            $table->string('track_number')->nullable()->index();
+            $table->ulid('id')->primary();
+            $table->string('track_number', 26)->nullable()->index();
             $table->foreignUlid('source')->constrained('cards');
             $table->foreignUlid('destination')->constrained('cards');
             $table->decimal('amount', 30, 2);

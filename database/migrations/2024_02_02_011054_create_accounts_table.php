@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained('users');
             $table->string('number', 12)->unique()->index();
             $table->unsignedDecimal('balance', 30,2)->default(0);

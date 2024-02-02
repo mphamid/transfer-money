@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cards', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id')->primary();
             $table->foreignUlid('account_id')->constrained('accounts');
             $table->string('number', 16)->unique()->index();
             $table->timestamps();
