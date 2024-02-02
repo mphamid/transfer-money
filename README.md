@@ -24,3 +24,8 @@ docker exec -it TransferMoneyApplication php /var/www/html/artisan migrate
 docker exec -it TransferMoneyApplication php /var/www/html/artisan test
 ```
 
+## Routes
+```
+api/v1/cards/transfer
+api/v1/cards/report
+```
