@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('fees', function (Blueprint $table) {
             $table->ulid();
-            $table->string('name');
-            $table->string('mobile', 11)->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignUlid('transfer_id')->constrained('transfers');
+            $table->decimal('amount', 30, 2);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('fees');
     }
 };

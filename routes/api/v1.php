@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('cards')->name('cards.')->group(function (){
-    Route::post('transfer', [CardToCardController::class, 'transfer'])->name('transfer');
+    Route::post('transfer', [CardToCardController::class, 'transfer'])
+        ->middleware('normalize_number:source,destination,amount')->name('transfer');
     Route::get('report', [CardToCardController::class, 'report'])->name('report');
 });
 

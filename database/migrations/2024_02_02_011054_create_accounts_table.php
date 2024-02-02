@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->ulid();
-            $table->string('name');
-            $table->string('mobile', 11)->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignUlid('user_id')->constrained('users');
+            $table->string('number', 12)->unique()->index();
+            $table->unsignedDecimal('balance', 30,2)->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('accounts');
     }
 };
