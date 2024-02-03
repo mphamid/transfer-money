@@ -20,7 +20,7 @@ class AccountFactory extends Factory
         return [
             'user_id' => User::factory(),
             'number' => $this->faker->unique()->numerify('############'),
-            'balance' => 0
+            'balance' => config('card.maximum_amount')
         ];
     }
 }

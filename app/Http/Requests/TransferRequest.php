@@ -23,9 +23,9 @@ class TransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'source' => ['numeric', new CardNumberRule()],
-            'destination' => ['numeric', new CardNumberRule()],
-            'amount' => ['numeric', 'gte:' . config('card.minimum_amount'), 'lte:' . config('card.maximum_amount')],
+            'source' => ['required', 'numeric', new CardNumberRule()],
+            'destination' => ['required', 'numeric', new CardNumberRule(), 'different:source'],
+            'amount' => ['required', 'numeric', 'gte:' . config('card.minimum_amount'), 'lte:' . config('card.maximum_amount')],
         ];
     }
 }

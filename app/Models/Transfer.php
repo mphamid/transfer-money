@@ -30,9 +30,19 @@ class Transfer extends Model
         return $this->belongsTo(Card::class, 'source', 'id');
     }
 
+    public function source_transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, 'transfer_id', 'id')->where('card_id', $this->source);
+    }
+
     public function destination_card(): BelongsTo
     {
         return $this->belongsTo(Card::class, 'destination', 'id');
+    }
+
+    public function destination_transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, 'transfer_id', 'id')->where('card_id', $this->destination);
     }
 
     public function fee(): HasOne

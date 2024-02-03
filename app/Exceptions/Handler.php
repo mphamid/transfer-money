@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Base\ServiceException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -26,5 +27,14 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof ServiceException) {
+            $statusCode = $e->getCode() === 0 ? 400 : $e->getCode();
+            return response()->json(['message' => $e->getResponseMessage()], $statusCode);
+        }
+        return parent::render($request, $e);
     }
 }

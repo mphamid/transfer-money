@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Transaction;
+use App\Models\Transfer;
 use App\Models\User;
 use App\Notifications\Channels\SmsChannel;
 use App\Notifications\Contracts\SMSNotificationInterface;
@@ -23,10 +24,8 @@ class CardToCardDecreaseBalanceNotification extends Notification implements Shou
     /**
      * Create a new notification instance.
      */
-    public function __construct(public readonly array $transactions)
+    public function __construct(public Transfer $transfer)
     {
-        $this->withdraw = $this->transactions['withdraw_transaction'];
-        $this->deposit = $this->transactions['deposit_transaction'];
     }
 
 
@@ -37,15 +36,11 @@ class CardToCardDecreaseBalanceNotification extends Notification implements Shou
 
     public function toSms(): string
     {
-        return __('notification.card_to_card.decrease', [
-            'amount' => $this->withdraw->amount->getAmount(),
-            'fee_amount' => $this->withdraw->fee->amount->getAmount(),
-            'destination_name' => $this->deposit->card->account->user->name,
-            'destination_card_number' => $this->deposit->card->number->mask(),
-            'source_name' => $this->withdraw->card->account->user->name,
-            'source_card_number' => $this->withdraw->card->number->mask(),
-            'done_at' => $this->withdraw->done_at->format('Y-m-d H:i:s'),
-            'track_id' => $this->withdraw->track_id,
+        $sourceTransaction = $this->transfer->source_transaction()->first();
+        return __('notification.transfer.success.source', [
+            'amount' => $sourceTransaction->amount,
+            'balance' => $sourceTransaction->balance,
+            'card_number' => $this->transfer->source_card->number
         ]);
     }
 
@@ -61,7 +56,7 @@ class CardToCardDecreaseBalanceNotification extends Notification implements Shou
         Log::critical('Card To Card Decrease Balance Notification Failed', [
             'exception' => get_class($exception),
             'exception_message' => $exception->getMessage(),
-            'transaction_id' => $this->withdraw->id,
+            'transfer_id' => $this->transfer->id,
         ]);
     }
 }
